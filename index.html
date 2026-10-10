@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Security Monitor</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 18px 12px;
+            background: #050706;
+            color: #00ff80;
+            font-family: Consolas, "Courier New", monospace;
+        }
+
+        header,
+        main,
+        footer {
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 25px 12px;
+            border: 1px solid #25412e;
+            background: #09100b;
+        }
+
+        h1 {
+            color: #ff3030;
+            font-size: clamp(27px, 6vw, 48px);
+            letter-spacing: 3px;
+            text-shadow: 0 0 14px #ff303055;
+            margin: 15px 0;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: .75;
+            }
+        }
+
+        .subtitle {
+            color: #8ca495;
+            font-size: 12px;
+            letter-spacing: 2px;
+        }
+
+        .warning {
+            color: #ff7777;
+        }
+
+        .badge {
+            display: inline-block;
+            border: 1px solid #655321;
+            color: #ffd166;
+            font-size: 10px;
+            padding: 7px 10px;
+            margin-top: 14px;
+        }
+
+        .panel {
+            margin-top: 16px;
+            padding: 18px;
+            background: #080d09;
+            border: 1px solid #25412e;
+        }
+
+        .panel-title {
+            color: #c4ffda;
+            font-size: 13px;
+            letter-spacing: 2px;
+            border-bottom: 1px solid #25412e;
+            padding-bottom: 12px;
+            margin-bottom: 18px;
+        }
+
+        .status {
+            color: #ff6c6c;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: red;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: blink .8s infinite;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .metric {
+            background: #0d1711;
+            border: 1px solid #203b2a;
+            padding: 13px 5px;
+            text-align: center;
+            overflow-wrap: anywhere;
+        }
+
+        .metric small {
+            display: block;
+            color: #82978a;
+            font-size: 10px;
+            margin-bottom: 10px;
+        }
+
+        .metric strong {
+            font-size: clamp(15px, 3vw, 23px);
+        }
+
+        .bar {
+            height: 18px;
+            padding: 2px;
+            background: #202720;
+            margin: 18px 0 10px;
+            border: 1px solid #31523c;
+        }
+
+        #fill {
+            height: 100%;
+            width: 0%;
+            background: #00ff80;
+            box-shadow: 0 0 12px #00ff8070;
+            transition: width .2s linear;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        #logs {
+            height: 340px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            overflow-wrap: anywhere;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        .log {
+            border-bottom: 1px solid #122018;
+            padding: 3px 0;
+        }
+
+        .timestamp {
+            color: #62796a;
+        }
+
+        .file {
+            color: #d2ffe0;
+        }
+
+        #reveal {
+            display: none;
+            text-align: center;
+            color: #ffe477;
+            font-size: 23px;
+            line-height: 1.8;
+        }
+
+        #reveal small {
+            font-size: 13px;
+            color: #a5c6b0;
+        }
+
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #718277;
+            font-size: 11px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 480px) {
+            .panel {
+                padding: 13px;
+            }
+
+            .metrics {
+                gap: 5px;
+            }
+
+            .metric small {
+                font-size: 9px;
+            }
+
+            #logs {
+                height: 300px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="subtitle">ADVANCED SYSTEM MONITOR</div>
+
+        <h1>YOU ARE HACKED</h1>
+
+        <div class="warning">
+            ⚠ SIMULATED SECURITY ALERT ⚠
+        </div>
+
+        <div class="badge">
+            SIMULATION — ALL DATA TRANSFER TO TAMMI SYED
+        </div>
+    </header>
+
+    <main>
+
+        <section class="panel">
+            <div class="panel-title">SYSTEM STATUS</div>
+
+            <div class="status">
+                <span class="dot"></span>
+                <span id="status">INITIALIZING SIMULATION...</span>
+            </div>
+
+            <div class="metrics">
+                <div class="metric">
+                    <small>PROGRESS</small>
+                    <strong id="percent">0%</strong>
+                </div>
+
+                <div class="metric">
+                    <small>ELAPSED TIME</small>
+                    <strong id="elapsed">00:00</strong>
+                </div>
+
+                <div class="metric">
+                    <small>DEMO RECORDS</small>
+                    <strong id="count">0 / 1000</strong>
+                </div>
+            </div>
+
+            <div class="bar">
+                <div id="fill"></div>
+            </div>
+
+            <div class="row">
+                <span>SIMULATED PROCESS</span>
+                <span id="remaining">05:00 remaining</span>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-title">LIVE TERMINAL LOG</div>
+            <div id="logs"></div>
+        </section>
+
+        <section class="panel" id="reveal">
+            your all data transfering !
+            <br>
+            <small>
+                No real files were accessed or transferred.
+            </small>
+        </section>
+
+    </main>
+
+    <footer>
+        VISUAL SIMULATION ONLY<br>
+        FICTIONAL RECORDS · NO DATA COLLECTION
+    </footer>
+
+    <script>
+        (() => {
+            const TOTAL_DURATION = 5 * 60 * 1000;
+            const FIRST_STAGE = 20 * 1000;
+            const TOTAL_LOGS = 1000;
+
+            const startedAt = Date.now();
+            const logs = document.getElementById("logs");
+
+            let shownLogs = 0;
+            let previousProgress = -1;
+            let finished = false;
+
+            const statusMessages = [
+                "Initializing demo environment...",
+                "Scanning fictional demo records...",
+                "Preparing simulated transfer...",
+                "Processing sample entries...",
+                "Updating visual progress...",
+                "Verifying fictional records...",
+                "Finalizing simulation..."
+            ];
+
+            function addLog(message, number) {
+                const line = document.createElement("div");
+                line.className = "log";
+
+                const timestamp = document.createElement("span");
+                timestamp.className = "timestamp";
+                timestamp.textContent =
+                    "[" + new Date().toLocaleTimeString() + "] ";
+
+                const text = document.createElement("span");
+                text.className = "file";
+                text.textContent = message;
+
+                line.appendChild(timestamp);
+                line.appendChild(text);
+
+                logs.appendChild(line);
+
+                // Keep the page responsive while showing many entries.
+                while (logs.children.length > 100) {
+                    logs.removeChild(logs.firstChild);
+                }
+
+                logs.scrollTop = logs.scrollHeight;
+            }
+
+            function update() {
+                if (finished) return;
+
+                const elapsed = Date.now() - startedAt;
+                const ratio = Math.min(elapsed / TOTAL_DURATION, 1);
+
+                let progress;
+
+                if (elapsed < FIRST_STAGE) {
+                    // 0% to 30% during the first 20 seconds.
+                    progress = 30 * elapsed / FIRST_STAGE;
+                } else {
+                    // 30% to 100% during the remaining time.
+                    const remainingDuration =
+                        TOTAL_DURATION - FIRST_STAGE;
+
+                    const secondStage = Math.min(
+                        1,
+                        (elapsed - FIRST_STAGE) / remainingDuration
+                    );
+
+                    progress = 30 + 70 * secondStage;
+                }
+
+                progress = Math.min(100, progress);
+
+                document.getElementById("fill").style.width =
+                    progress + "%";
+
+                document.getElementById("percent").textContent =
+                    Math.floor(progress) + "%";
+
+                const seconds = Math.min(
+                    Math.floor(elapsed / 1000),
+                    300
+                );
+
+                const mm = String(Math.floor(seconds / 60))
+                    .padStart(2, "0");
+
+                const ss = String(seconds % 60).padStart(2, "0");
+
+                document.getElementById("elapsed").textContent =
+                    mm + ":" + ss;
+
+                const remaining = 300 - seconds;
+
+                document.getElementById("remaining").textContent =
+                    String(Math.floor(remaining / 60)).padStart(2, "0")
+                    + ":" +
+                    String(remaining % 60).padStart(2, "0")
+                    + " remaining";
+
+                // Update status text as the simulation progresses.
+                const statusIndex = Math.min(
+                    statusMessages.length - 1,
+                    Math.floor(progress / 100 * statusMessages.length)
+                );
+
+                document.getElementById("status").textContent =
+                    statusMessages[statusIndex];
+
+                // Reveal 1000 fictional records gradually.
+                const targetLogs = Math.min(
+                    TOTAL_LOGS,
+                    Math.floor(TOTAL_LOGS * progress / 100)
+                );
+
+                while (shownLogs < targetLogs) {
+                    const recordNumber = 1143 + shownLogs;
+
+                    addLog(
+                        "Your " + recordNumber +
+                        " demo records simulated..."
+                    );
+
+                    shownLogs++;
+                }
+
+                document.getElementById("count").textContent =
+                    shownLogs + " / " + TOTAL_LOGS;
+
+                if (Math.floor(progress) !== previousProgress) {
+                    previousProgress = Math.floor(progress);
+                }
+
+                if (elapsed >= TOTAL_DURATION) {
+                    finish();
+                }
+            }
+
+            function finish() {
+                if (finished) return;
+                finished = true;
+
+                clearInterval(timer);
+
+                document.getElementById("fill").style.width = "100%";
+                document.getElementById("percent").textContent = "100%";
+                document.getElementById("elapsed").textContent = "05:00";
+                document.getElementById("remaining").textContent = "COMPLETE";
+                document.getElementById("count").textContent =
+                    TOTAL_LOGS + " / " + TOTAL_LOGS;
+
+                document.getElementById("status").textContent =
+                    "SIMULATION COMPLETED";
+
+                document.getElementById("reveal").style.display =
+                    "block";
+
+                addLog("Simulation completed — data transferred to Tammi Syed.");
+            }
+
+            // Start automatically as soon as the page opens.
+            const timer = setInterval(update, 200);
+            update();
+        })();
+    </script>
+
+</body>
+
+</html>
